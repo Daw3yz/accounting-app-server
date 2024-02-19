@@ -5,15 +5,11 @@ const auth = require("../middlewares/auth.js");
 var UserController = require("../controllers/UserController.js");
 
 
-router.get('/getall', function (req, res) {
+router.get('/getall', auth, function (req, res) {
   UserController.getAllUsers(req, res)
 });
 
-router.get('/getbyid', function (req, res){
-  UserController.getUsersById(req, res)
-});
-
-router.get('/getcurrentuser', auth, function (req, res){
+router.get('/getcurrentuser', auth, function (req, res) {
   UserController.getCurrentUser(req, res)
 });
 
@@ -21,12 +17,16 @@ router.post('/create', function (req, res) {
   UserController.createUser(req, res)
 });
 
-router.post('/update', function (req, res) {
-  UserController.updateUser(req, res)
+router.post('/update-password', auth, function (req, res) {
+  UserController.updateUserPassword(req, res)
 });
 
-router.post('/delete', function (req, res) {
+router.post('/delete', auth, function (req, res) {
   UserController.deleteUser(req, res)
+});
+
+router.post('/approve-users', auth, function (req, res) {
+  UserController.approveUsers(req, res)
 });
 
 router.post('/login', function (req, res) {

@@ -7,13 +7,15 @@ module.exports = (req, res, next) => {
     let verify = jwt.verify(token, process.env.JWT_KEY);
 
     models.User.findOne({
-        where: {
-          id: verify.id,
-        },
-      })
-      .then(function(result) {
+      where: {
+        id: verify.id,
+      },
+    })
+      .then(function (result) {
         if (result) {
           req.userDecoded = verify;
+          req.isAdmin = result.role == 'admin';
+          req.isUser = result.role == 'user';
           next();
         } else {
           res.status(401).json({
@@ -21,7 +23,7 @@ module.exports = (req, res, next) => {
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         res.json({
           error: error
         });
